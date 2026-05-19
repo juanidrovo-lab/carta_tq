@@ -10,8 +10,8 @@ const containerVariants = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.055,
-      delayChildren: 3.2,
+      staggerChildren: 0.05,
+      delayChildren: 3.0,
     },
   },
 };
@@ -30,44 +30,45 @@ export default function Scene4() {
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center bg-[#080a10] overflow-hidden">
-      {/* Background – calmed, darker */}
+      {/* Subtle ambient radial */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            'radial-gradient(ellipse at 50% 60%, rgba(212,160,23,0.06) 0%, transparent 65%)',
+          background: 'radial-gradient(ellipse at 50% 55%, rgba(212,160,23,0.05) 0%, transparent 60%)',
         }}
       />
 
-      {/* Subtle horizontal gradient at top */}
-      <div
-        className="absolute top-0 left-0 right-0 h-24"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(26,42,94,0.2), transparent)',
-        }}
+      {/* ── DARKNESS VIGNETTE that deepens when the tattoo is drawn ── */}
+      {/* Fades in after the forearm appears, making the gold letter the sole focus */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at 50% 45%, transparent 28%, rgba(0,0,0,0.96) 72%)' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2.5, delay: 2.2, ease: 'easeInOut' }}
       />
 
       <div className="relative z-10 flex flex-col items-center gap-6 max-w-lg mx-auto px-6 w-full">
-        {/* Tattoo scene label */}
+        {/* Scene label — fades away as the vignette closes */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.3 }}
+          animate={{ opacity: [0, 0.7, 0] }}
+          transition={{ duration: 4, delay: 0.3, times: [0, 0.3, 1] }}
           className="flex items-center gap-3"
         >
-          <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#d4a017]/60" />
+          <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#d4a017]/50" />
           <span
             className="text-xs tracking-widest uppercase"
             style={{ color: '#d4a017', letterSpacing: '0.22em', fontFamily: 'var(--font-playfair)' }}
           >
             La Huella Permanente
           </span>
-          <div className="h-px w-10 bg-gradient-to-l from-transparent to-[#d4a017]/60" />
+          <div className="h-px w-10 bg-gradient-to-l from-transparent to-[#d4a017]/50" />
         </motion.div>
 
-        {/* Forearm SVG with tattoo */}
+        {/* Forearm — slides in, then the vignette spotlights it */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.5, ease: 'easeOut' }}
           className="w-full max-w-xs md:max-w-sm mx-auto"
@@ -75,18 +76,18 @@ export default function Scene4() {
           <Forearm className="w-full" />
         </motion.div>
 
-        {/* Golden letter highlight text */}
+        {/* Golden letter label — appears after the P is drawn */}
         <motion.p
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.7 }}
-          transition={{ duration: 1, delay: 4.2 }}
-          className="text-xs text-center tracking-widest"
-          style={{ color: '#d4a017', fontFamily: 'var(--font-playfair)', letterSpacing: '0.18em' }}
+          animate={{ opacity: 0.75 }}
+          transition={{ duration: 1.5, delay: 4.5 }}
+          className="text-sm text-center tracking-widest"
+          style={{ color: '#d4a017', fontFamily: 'var(--font-playfair)', letterSpacing: '0.25em' }}
         >
-          — N —
+          — P —
         </motion.p>
 
-        {/* Word-by-word text */}
+        {/* Word-by-word narrative */}
         <motion.p
           variants={containerVariants}
           initial="hidden"
@@ -95,12 +96,16 @@ export default function Scene4() {
           style={{
             color: '#e8e0d0',
             fontFamily: 'var(--font-playfair)',
-            textShadow: '0 2px 8px rgba(0,0,0,0.8)',
-            lineHeight: '1.85',
+            textShadow: '0 2px 10px rgba(0,0,0,0.9)',
+            lineHeight: '1.9',
           }}
         >
           {words.map((word, i) => (
-            <motion.span key={i} variants={wordVariant} style={{ display: 'inline-block', marginRight: '0.28em' }}>
+            <motion.span
+              key={i}
+              variants={wordVariant}
+              style={{ display: 'inline-block', marginRight: '0.28em' }}
+            >
               {word}
             </motion.span>
           ))}
