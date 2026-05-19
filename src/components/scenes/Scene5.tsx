@@ -1,180 +1,105 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import CrochetHeart from '@/components/svg/CrochetHeart';
+import AmbientField from '@/components/AmbientField';
 
 const text1 =
   'Feliz cumpleaños, niña hermosa. Espero de todo corazón que cumplas todas tus metas, todos tus objetivos y todo lo que alguna vez anhelaste.';
 
 const text2 =
-  'Al momento de escribirte esto, aún no hemos definido si es que vamos a seguir juntos o nos vamos a distanciar. Pero quiero que sepas algo con absoluta certeza: eres el amor de mi vida. Eres aquello que no quisiera perder jamás. Sea cual sea el resultado de nuestras conversaciones, siempre vas a estar en mi corazón, y serás la primera mujer con la que quise, no solo formar una familia, sino construir una vida entera juntos.';
+  'Aún no hemos definido si seguiremos juntos o si nos vamos a distanciar. Pero quiero que sepas algo con absoluta certeza: eres el amor de mi vida. Eres aquello que no quisiera perder jamás. Sea cual sea el resultado, siempre vas a estar en mi corazón, y serás la primera mujer con la que quise, no solo formar una familia, sino construir una vida entera juntos.';
 
-function WordByWord({ text, delay }: { text: string; delay: number }) {
+function CinematicParagraph({
+  text,
+  delay,
+  size = 'base',
+}: {
+  text: string;
+  delay: number;
+  size?: 'base' | 'small';
+}) {
   const words = text.split(' ');
-  const containerVariants = {
+  const container = {
     hidden: {},
-    show: { transition: { staggerChildren: 0.06, delayChildren: delay } },
+    show: { transition: { staggerChildren: 0.07, delayChildren: delay } },
   };
-  const wordVariant = {
-    hidden: { opacity: 0, y: 8 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
+  const word = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 0.82,
+      transition: { duration: 1.2, ease: 'easeInOut' as const },
+    },
   };
   return (
     <motion.p
-      variants={containerVariants}
+      variants={container}
       initial="hidden"
       animate="show"
-      className="text-base md:text-lg leading-relaxed text-center"
+      className="text-center max-w-xl mx-auto"
       style={{
-        color: '#e8e0d0',
         fontFamily: 'var(--font-playfair)',
-        textShadow: '0 2px 8px rgba(0,0,0,0.8)',
-        lineHeight: '1.9',
+        fontWeight: 300,
+        fontSize:
+          size === 'small'
+            ? 'clamp(0.85rem, 2.1vw, 1.05rem)'
+            : 'clamp(0.95rem, 2.4vw, 1.15rem)',
+        color: '#ecd9c0',
+        letterSpacing: '0.06em',
+        lineHeight: 2.0,
+        textShadow:
+          '0 1px 14px rgba(0,0,0,0.98), 0 0 30px rgba(0,0,0,0.85)',
       }}
     >
-      {words.map((word, i) => (
-        <motion.span key={i} variants={wordVariant} style={{ display: 'inline-block', marginRight: '0.28em' }}>
-          {word}
+      {words.map((w, i) => (
+        <motion.span
+          key={i}
+          variants={word}
+          style={{ display: 'inline-block', marginRight: '0.32em' }}
+        >
+          {w}
         </motion.span>
       ))}
     </motion.p>
   );
 }
 
-// Crochet tapestry unraveling SVG
-function CrochetTapestry() {
-  const rows = 6;
-  const cols = 12;
-  return (
-    <svg viewBox="0 0 300 90" className="w-full opacity-40">
-      {Array.from({ length: rows }).map((_, row) =>
-        Array.from({ length: cols }).map((_, col) => {
-          const x = 12 + col * 24;
-          const y = 8 + row * 14;
-          return (
-            <motion.path
-              key={`${row}-${col}`}
-              d={`M ${x} ${y} Q ${x + 5} ${y - 5} ${x + 10} ${y} Q ${x + 15} ${y + 5} ${x + 20} ${y}`}
-              fill="none"
-              stroke={row % 2 === 0 ? '#d4a017' : '#3a6bc8'}
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{
-                pathLength: row < 4 ? 1 : [1, 0],
-                opacity: row < 4 ? 0.6 : [0.6, 0],
-              }}
-              transition={{
-                duration: row < 4 ? 0.4 : 1.5,
-                delay: 0.3 + row * 0.12 + col * 0.04,
-                ease: 'easeOut',
-              }}
-            />
-          );
-        })
-      )}
-    </svg>
-  );
-}
-
-// Diverging paths SVG
-function DivergingPaths() {
-  return (
-    <svg viewBox="0 0 200 60" className="w-48 mx-auto opacity-60">
-      {/* Left path */}
-      <motion.path
-        d="M 100 10 Q 75 25 50 45 Q 35 55 20 58"
-        fill="none"
-        stroke="#d4a017"
-        strokeWidth="2"
-        strokeLinecap="round"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.7 }}
-        transition={{ duration: 1.5, delay: 1.0 }}
-      />
-      {/* Right path */}
-      <motion.path
-        d="M 100 10 Q 125 25 150 45 Q 165 55 180 58"
-        fill="none"
-        stroke="#3a6bc8"
-        strokeWidth="2"
-        strokeLinecap="round"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.7 }}
-        transition={{ duration: 1.5, delay: 1.2 }}
-      />
-      {/* Origin dot */}
-      <motion.circle
-        cx="100"
-        cy="10"
-        r="3.5"
-        fill="#e8b84b"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-      />
-    </svg>
-  );
-}
-
 export default function Scene5() {
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-start bg-[#070810] overflow-y-auto overflow-x-hidden">
-      {/* Dense crochet tapestry at top */}
-      <div className="relative z-10 w-full max-w-lg mx-auto px-4 pt-6">
-        <CrochetTapestry />
-      </div>
-
-      {/* Dark background gradient */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse at 50% 50%, rgba(192,57,43,0.05) 0%, transparent 70%)',
-        }}
+    <div className="relative w-full h-full overflow-hidden">
+      {/* Two color masses pulling apart — warm crimson and cool indigo */}
+      <AmbientField
+        baseColor="#04030a"
+        colors={[
+          { color: '#5a0a18', size: 130, opacity: 0.7,  blur: 110, duration: 95,  startX: '-15%', startY: '10%' },
+          { color: '#0d1a4a', size: 130, opacity: 0.65, blur: 110, duration: 110, startX: '55%',  startY: '15%' },
+          { color: '#3a0820', size: 90,  opacity: 0.5,  blur: 100, duration: 85,  startX: '20%',  startY: '55%' },
+          { color: '#1a2055', size: 90,  opacity: 0.45, blur: 100, duration: 100, startX: '45%',  startY: '60%' },
+        ]}
       />
 
-      <div className="relative z-10 flex flex-col items-center gap-5 max-w-lg mx-auto px-6 w-full py-2">
-        {/* Birthday greeting first */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="flex items-center gap-3"
-        >
-          <div className="h-px w-8 bg-gradient-to-r from-transparent to-[#c0392b]/60" />
-          <span
-            className="text-xs tracking-widest uppercase"
-            style={{ color: '#c0392b', letterSpacing: '0.2em', fontFamily: 'var(--font-playfair)' }}
-          >
-            La Encrucijada
-          </span>
-          <div className="h-px w-8 bg-gradient-to-l from-transparent to-[#c0392b]/60" />
-        </motion.div>
+      {/* Slow heart-pulse — a faint warm presence at center, breathing */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none flex items-center justify-center"
+        animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.05, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ mixBlendMode: 'screen' }}
+      >
+        <div
+          style={{
+            width: '24vmin',
+            height: '24vmin',
+            borderRadius: '50%',
+            background:
+              'radial-gradient(circle, rgba(220,80,70,0.30) 0%, rgba(140,30,40,0.15) 40%, transparent 70%)',
+            filter: 'blur(35px)',
+          }}
+        />
+      </motion.div>
 
-        <WordByWord text={text1} delay={0.8} />
-
-        {/* Beating crochet heart */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 2.5, ease: 'easeOut' }}
-          className="flex justify-center"
-        >
-          <CrochetHeart size={100} color="#c0392b" />
-        </motion.div>
-
-        {/* Diverging paths */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 3.0 }}
-          className="w-full"
-        >
-          <DivergingPaths />
-        </motion.div>
-
-        <WordByWord text={text2} delay={3.5} />
+      {/* Two stacked paragraphs separated by a soft breathing pause */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-8 gap-8 md:gap-10">
+        <CinematicParagraph text={text1} delay={2.5} />
+        <CinematicParagraph text={text2} delay={11} size="small" />
       </div>
     </div>
   );
