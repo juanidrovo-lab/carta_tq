@@ -71,31 +71,60 @@ const SCENES = [
 
 // ─── Hugging Face generator (free tier — needs HF_TOKEN in .env.local) ───────
 async function generateWithHuggingFace(scene, outPath) {
-  // FLUX.1-schnell: fast, free on HF inference API
-  const endpoint = 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell';
-  console.log(`    Requesting from Hugging Face (FLUX.1-schnell)…`);
+  // Try FLUX.1-schnell first, fall back to SDXL if gated/unavailable
+  const endpoints = [
+    'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
+    'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0',
+    'https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5',
+  ];
 
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${HF_KEY}`,
-      'Content-Type': 'application/json',
-      'x-wait-for-model': 'true',
-    },
-    body: JSON.stringify({
-      inputs: scene.prompt,
-      parameters: { width: 1344, height: 768, num_inference_steps: 4 },
-    }),
-    signal: AbortSignal.timeout(120_000),
-  });
+  let lastErr;
+  for (const endpoint of endpoints) {
+    const modelName = endpoint.split('/').slice(-2).join('/');
+    console.log(`    Trying ${modelName}…`);
 
-  if (!res.ok) {
-    const msg = await res.text();
-    throw new Error(`HF ${res.status}: ${msg.slice(0, 200)}`);
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${HF_KEY}`,
+          'Content-Type': 'application/json',
+          'x-wait-for-model': 'true',
+        },
+        body: JSON.stringify({
+          inputs: scene.prompt,
+          parameters: { width: 1024, height: 576, num_inference_steps: 20 },
+        }),
+        signal: AbortSignal.timeout(120_000),
+      });
+
+      if (!res.ok) {
+        const msg = await res.text();
+        console.log(`    ⚠️  ${modelName}: HTTP ${res.status} — ${msg.slice(0, 120)}`);
+        lastErr = new Error(`HTTP ${res.status}`);
+        continue;
+      }
+
+      const contentType = res.headers.get('content-type') ?? '';
+      if (!contentType.startsWith('image/') && !contentType.includes('octet')) {
+        const msg = await res.text();
+        console.log(`    ⚠️  ${modelName}: unexpected content-type ${contentType} — ${msg.slice(0, 120)}`);
+        lastErr = new Error(`Unexpected content-type: ${contentType}`);
+        continue;
+      }
+
+      const buf = Buffer.from(await res.arrayBuffer());
+      fs.writeFileSync(outPath, buf);
+      console.log(`    ✅  Used ${modelName}`);
+      return;
+    } catch (err) {
+      const detail = err.cause?.code ?? err.cause?.message ?? err.message;
+      console.log(`    ⚠️  ${modelName}: ${detail}`);
+      lastErr = err;
+    }
   }
 
-  const buf = Buffer.from(await res.arrayBuffer());
-  fs.writeFileSync(outPath, buf);
+  throw lastErr ?? new Error('All HF endpoints failed');
 }
 
 // ─── Pollinations.ai generator (free, works locally) ─────────────────────────
