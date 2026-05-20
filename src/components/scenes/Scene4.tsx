@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
+import SceneBackground from '@/components/SceneBackground';
 
 const text =
   'Hemos vivido muchísimas cosas que están guardadas en mi memoria. Tal vez no todas fueron buenas, pero lo bueno pesa muchísimo más. Hoy quiero decirte que me hizo muy feliz el haberte conocido y el haber compartido mi tiempo contigo. Cada beso, cada abrazo y cada lugar que visitamos se quedará para siempre en mí, tanto que llevaré esta letra tatuada en mi brazo por lo que me queda de vida.';
@@ -63,6 +64,7 @@ export default function Scene4() {
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-[#04030a]">
+      <SceneBackground sceneId={4} darkness={0.3} />
       {/* Deep ambient warmth — the memory-space */}
       <div
         className="absolute inset-0 pointer-events-none"

@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import SceneBackground from '@/components/SceneBackground';
 
 const lines = [
   { text: 'Gracias por existir, Noe.',     delay: 3.5,  cursive: false },
@@ -18,10 +19,10 @@ export default function Scene6() {
   return (
     <motion.div
       className="relative w-full h-full overflow-hidden bg-[#040208]"
-      // Full-frame breath — one inhale, one exhale, stretched across the scene
       animate={{ scale: [1, 1.025, 1.01, 1.0], filter: ['brightness(1)', 'brightness(1.08)', 'brightness(0.96)', 'brightness(1)'] }}
       transition={{ duration: 18, ease: 'easeInOut', times: [0, 0.35, 0.75, 1] }}
     >
+      <SceneBackground sceneId={6} darkness={0.4} />
       {/* Warm enclosing glow — the room after */}
       <motion.div
         className="absolute inset-0 pointer-events-none"

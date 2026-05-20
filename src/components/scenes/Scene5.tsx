@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
+import SceneBackground from '@/components/SceneBackground';
 
 const text1 =
   'Feliz cumpleaños, niña hermosa. Espero de todo corazón que cumplas todas tus metas, todos tus objetivos y todo lo que alguna vez anhelaste.';
@@ -87,6 +88,7 @@ export default function Scene5() {
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-[#040208]">
+      <SceneBackground sceneId={5} darkness={0.35} />
       {/* WARM MASS (right) — pulls right as uncertainty appears */}
       <motion.div
         className="absolute"

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
+import SceneBackground from '@/components/SceneBackground';
 
 const text =
   'Me quedé con tantas ganas de seguir hablando contigo que te seguí en Instagram. Cuando aceptaste la solicitud, todo empezó a darse de una manera increíble. Fue como si el universo se alineara: nuestros apellidos, nuestros signos zodiacales, nuestras carreras y hasta ciertos detalles de nuestra historia coincidían demasiado. Para mí, no podía ser solo una casualidad; sentí que la vida trataba de decirme algo muy claro.';
@@ -54,12 +55,13 @@ export default function Scene2() {
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-[#04050e]">
+      <SceneBackground sceneId={2} darkness={0.42} />
       {/* Quiet cosmic backdrop */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 50%, rgba(20,30,70,0.45) 0%, transparent 65%)',
+            'radial-gradient(ellipse at 50% 50%, rgba(20,30,70,0.25) 0%, transparent 65%)',
         }}
       />
 

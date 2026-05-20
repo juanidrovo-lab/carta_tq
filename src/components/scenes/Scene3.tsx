@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import SceneBackground from '@/components/SceneBackground';
 
 const text =
   'Desde ese primer momento me encantó tu forma de ser. Eres alegre, ocurrida, risueña y, además, absolutamente hermosa. Poco a poco te fuiste ganando mi corazón. Tuvimos altos y bajos, idas y venidas constantes, y un par de problemas con terceros, pero hace ya casi un año todo cambió. Ya no solo me gustabas; me enamoré profundamente de ti. Me enamoré de esos ojos preciosos y de la forma en que alegras mis mañanas, mis noches, mis días y mi vida en general.';
@@ -50,6 +51,7 @@ export default function Scene3() {
 
   return (
     <div className="relative w-full h-full overflow-hidden">
+      <SceneBackground sceneId={3} darkness={0.35} />
       {/* Sky — color shifts from cold violet/blue to warm gold/orange */}
       <motion.div
         className="absolute inset-0"

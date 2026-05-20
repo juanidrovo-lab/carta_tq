@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import SceneBackground from '@/components/SceneBackground';
 
 const text =
   'Noe, todo empezó un primero de diciembre de 2023. Aún recuerdo cómo estabas vestida de negro. Desde el primer instante llamaste mi atención; me pareciste una niña preciosa. En ese momento de mi vida, yo no estaba buscando nada ni a nadie, y las circunstancias en las que nos cruzamos fueron, por decirlo menos, un tanto extrañas. Pero el destino tiene sus formas, y nuestra primera conexión fue empezar a hablar de derecho.';
@@ -39,12 +40,13 @@ export default function Scene1() {
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-[#04030a]">
+      <SceneBackground sceneId={1} darkness={0.38} />
       {/* Faint cosmic depth — almost imperceptible drift */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 50%, rgba(20,15,40,0.5) 0%, transparent 60%)',
+            'radial-gradient(ellipse at 50% 50%, rgba(20,15,40,0.3) 0%, transparent 60%)',
         }}
       />
 
